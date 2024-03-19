@@ -1,35 +1,13 @@
-import { useState, useEffect } from "react";
-import UserList from "./components/UserList";
+import UserItem from "./components/UserItem";
 import ErrorMessage from "./components/ErrorMessage";
+import useFetch from "./hooks/useFetch";
 
 import "./App.css";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getApiData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data);
-      } else {
-        setError(true);
-      }
-    } catch (error) {
-      setError(true);
-    }
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    getApiData();
-  }, []);
+  const [isLoading, data, error] = useFetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
 
   return (
     <div className="flex flex-col items-center ">
@@ -41,8 +19,8 @@ function App() {
         <p className="text-4xl pt-16 text-blue-500">Wait a few seconds 🤨.</p>
       ) : (
         <ul className="flex flex-wrap items-center justify-center gap-10 pt-12 pb-12 ">
-          {users.map((users) => (
-            <UserList key={users.id} users={users} />
+          {data?.map((data) => (
+            <UserItem key={data.id} users={data} />
           ))}
         </ul>
       )}
