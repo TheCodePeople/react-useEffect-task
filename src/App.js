@@ -1,4 +1,4 @@
-import UserItem from "./components/UserItem";
+import UserList from "./components/UserList";
 import ErrorMessage from "./components/ErrorMessage";
 import useFetch from "./hooks/useFetch";
 
@@ -18,11 +18,7 @@ function App() {
       {isLoading ? (
         <p className="text-4xl pt-16 text-blue-500">Wait a few seconds 🤨.</p>
       ) : (
-        <ul className="flex flex-wrap items-center justify-center gap-10 pt-12 pb-12 ">
-          {data?.map((data) => (
-            <UserItem key={data.id} users={data} />
-          ))}
-        </ul>
+        <UserList data={data} />
       )}
     </div>
   );
