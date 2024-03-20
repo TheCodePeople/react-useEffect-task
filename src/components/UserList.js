@@ -1,46 +1,21 @@
 import { useState } from "react";
 import UserItem from "./UserItem";
+import useFormInput from "../hooks/useFormInput";
+import useUserList from "../hooks/useUserList";
 
 export default function UserList({ data }) {
-  const [userList, setUserList] = useState(data);
+  // const [userList, setUserList] = useState(data);
   const [userAdd, setUserAdd] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPhone, setUserPhone] = useState("");
-  const [userCompany, setUserCompany] = useState("");
 
-  const handleDelete = (userId) => {
-    setUserList(userList.filter((user) => user.id !== userId));
-  };
-  const handleSave = (userId, userName, userEmail, userPhone, userCompany) => {
-    setUserList(
-      userList.map((user) =>
-        user.id === userId
-          ? {
-              ...user,
-              name: userName,
-              email: userEmail,
-              phone: userPhone,
-              company: { ...user.company, name: userCompany },
-            }
-          : user
-      )
-    );
-  };
-  const handleChangeName = (event) => {
-    setUserName(event.target.value);
-  };
-  const handleChangeEmail = (event) => {
-    setUserEmail(event.target.value);
-  };
-  const handleChangePhone = (event) => {
-    setUserPhone(event.target.value);
-  };
-  const handleChangeCompany = (event) => {
-    setUserCompany(event.target.value);
-  };
+  const { userList, handleDelete, handleSave, handleCreate } =
+    useUserList(data);
 
-  const handleCreate = () => {
+  const [userName, setUserName] = useFormInput("");
+  const [userEmail, setUserEmail] = useFormInput("");
+  const [userPhone, setUserPhone] = useFormInput("");
+  const [userCompany, setUserCompany] = useFormInput("");
+
+  const handleCreateUser = () => {
     const UserObject = {
       id: userList.length + 1,
       name: userName,
@@ -48,7 +23,7 @@ export default function UserList({ data }) {
       phone: userPhone,
       company: { name: userCompany },
     };
-    setUserList([...userList, UserObject]);
+    handleCreate(UserObject);
     setUserAdd(false);
   };
   return (
@@ -63,48 +38,55 @@ export default function UserList({ data }) {
           />
         ))}
         {userAdd ? (
-          <div className="flex flex-col justify-center items-center gap-2 border-solid border-black border-2 shadow-lg shadow-slate-500 rounded-3xl w-96  hover:bg-slate-500 hover:text-white hover:transition-all cursor-pointer h-48">
-            <h3>
-              Name:{" "}
+          <li className="flex flex-col justify-center pl-9 gap-3 text-white bg-slate-500 border-solid border-black border-2 shadow-lg shadow-slate-500 rounded-3xl w-96  hover:bg-slate-600  hover:transition-all cursor-pointer h-64">
+            <h3 className="flex gap-9 ">
+              <span className="font-extrabold"> Name:</span>
+
               <input
-                className=" bg-slate-600 "
+                className="rounded-3xl text-sm p-1 bg-slate-200 text-black"
                 type="text"
-                value={userName}
-                onChange={handleChangeName}
+                onChange={setUserName}
               />
             </h3>
-            <p>
-              Email:{" "}
+            <p className="flex gap-9">
+              <span className="font-extrabold"> Email:</span>
               <input
+                className="rounded-3xl text-sm p-1 bg-slate-200 text-black"
                 type="text"
-                className="bg-slate-600"
-                value={userEmail}
-                onChange={handleChangeEmail}
+                onChange={setUserEmail}
               />
             </p>
-            <p>
-              Phone:{" "}
+            <p className="flex gap-6 ">
+              <span className="mr-3 font-extrabold"> phone:</span>
               <input
+                className="rounded-3xl text-sm p-1 bg-slate-200 text-black"
                 type="text"
-                className="bg-slate-600"
-                value={userPhone}
-                onChange={handleChangePhone}
+                onChange={setUserPhone}
               />
             </p>
-            <p>
-              Company:{" "}
+            <p className="flex ">
+              <span className="mr-2 font-extrabold"> Company: </span>
               <input
+                className="rounded-3xl text-sm p-1 bg-slate-200 text-black"
                 type="text"
-                className="bg-slate-600"
-                value={userCompany}
-                onChange={handleChangeCompany}
+                onChange={setUserCompany}
               />
             </p>
-            <button onClick={handleCreate}>Add to list</button>
-          </div>
+            <button
+              className="ml-20 border-solid border-black border-2 w-32 flex justify-center rounded-3xl text-2xl p-2"
+              onClick={handleCreateUser}
+            >
+              Add to list
+            </button>
+          </li>
         ) : (
           <>
-            <button onClick={(handleCreate) => setUserAdd(true)}>Add</button>
+            <button
+              className="font-bold text-6xl font border-solid border-black border-2 shadow-lg shadow-slate-500 rounded-3xl w-96  hover:bg-slate-500 hover:text-white hover:transition-all cursor-pointer h-60"
+              onClick={(handleCreateUser) => setUserAdd(true)}
+            >
+              +
+            </button>
           </>
         )}
       </ul>
