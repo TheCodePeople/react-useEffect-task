@@ -22,9 +22,13 @@ function useFetch(url) {
     }, []);
 
 
-    return [usersList, error, loading];
+    return [usersList, setUsersList, error, loading];
 
 }
 
 export default useFetch;
+
+
+
+
 
