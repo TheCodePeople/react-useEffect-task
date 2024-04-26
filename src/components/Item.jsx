@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+
 import UseToggle from "../hooks/UseToggle";
 
 function Item() {
-  const [fetchData, Infor, isLoading] = UseToggle();
+  const [ Infor, isLoading] = UseToggle();
   return (
     <div className="m-20 flex justify-around items-center flex-wrap gap-12">
       {isLoading ? (
